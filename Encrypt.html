@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StegoSafe - Encrypt</title>
+<link rel="stylesheet" href=".css">
+</head>
+<body>
+<div class="container">
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <img src="Photos/shield.png" alt="Logo" class="logo">
+    <div class="top-buttons">
+      <button class="bold-button" id="hideButton">Hide</button>
+      <a href="Decrypt.html"><button id="extractButton">Extract</button></a>
+      <button class="bold-button" id="darkModeToggle">Dark Mode</button>
+    </div>
+  </header>
+
+  <!-- Title -->
+  <h1>Securely <span id="action">encrypt</span> your message into an image with StegoSafe</h1>
+
+  <!-- Main Section -->
+  <main>
+    <div class="input-container">
+        <!-- First Box -->
+      <!-- First Box -->
+<div class="box image-box">
+    <div class="image-upload">
+      <label for="fileInput" class="bold-button" id="encryptImage">Browse Your Image</label>
+      <input type="file" id="fileInput" accept="image/*" style="display: none;">
+      <br><span>----- OR -----</span>
+      <div class="drag-drop" id="dragDropArea">
+        Drag and Drop Your Image Here
+      </div>
+      <p id="fileName">No file selected</p>
+    </div>
+  </div>
+  
+
+      <!-- Second Box -->
+      <div class="box text-box">
+        <label for="message">Enter Your Text</label>
+        <textarea id="message" placeholder="Describe Your Message..."></textarea>
+      </div>
+    </div>
+
+    <!-- Password Section -->
+    <div class="password-container">
+      <label for="password">Enter Security Key (Optional)</label>
+      <div class="password-input">
+        <input id="securityKey" type="password" placeholder="e.g., 5Kooebnc">
+        <button id="togglePassword">👁️</button>
+      </div>
+    </div>
+
+    <!-- Download Button -->
+    <button class="bold-button" onclick="encryptMessage()">Encrypt and Download</button>
+  </main>
+</div>
+
+<script src="scripts.js"></script>
+</body>
+</html>
+
+<style>
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: linear-gradient(120deg, #87cefa, #9370db, #ee82ee);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #222;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.dark-mode {
+  background: #181818;
+  color: #f1f1f1;
+}
+
+/* Adjust container to improve contrast in dark mode */
+.container {
+  width: 90%;
+  max-width: 700px;
+  background: rgba(250, 239, 239, 0.9);
+  border: 3px solid #444;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.dark-mode .container {
+  background: rgba(20, 20, 20, 0.9);
+  border-color: #666;
+}
+
+/* Top Bar */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  max-width: 100px;
+}
+
+.top-buttons button {
+  background: #4f5bd5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.top-buttons button:hover {
+  background: #3b47a1;
+}
+
+/* Title */
+h1 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+/* Input Boxes */
+.input-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+
+.bold-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.bold-button:hover {
+  background-color: #0056b3;
+}
+
+.box {
+  flex: 1;
+  padding: 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background: #ffffff;
+  text-align: center;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* Image Box */
+.image-box, .text-box, .password-box {
+  flex: 1;
+  padding: 15px;
+  border: 3px solid;
+  border-radius: 8px;
+  background: linear-gradient(to bottom, #ffffff, #f9f9ff);
+  text-align: center;
+  transition: background-color 0.3s, border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.dark-mode .image-box {
+  background: linear-gradient(to bottom, #333, #444);
+  border-color: #7f00ff;
+}
+
+.dark-mode .text-box {
+  background: linear-gradient(to bottom, #222, #333);
+  border-color: #007bff;
+}
+
+.dark-mode .password-box {
+  background: linear-gradient(to bottom, #222, #333);
+  border-color: #8e44ad;
+}
+
+.image-box .bold-button {
+  display: inline-block;
+  background: #4f5bd5;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.image-box .drag-drop {
+  margin-top: 10px;
+  padding: 20px;
+  border: 2px dashed #bbb;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: #777;
+  cursor: pointer;
+}
+
+.text-box label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
+
+/* Input and textarea styling */
+textarea, input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  font-size: 1em;
+  background: #ffffff;
+  color: #333;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  box-sizing: border-box;
+}
+
+.dark-mode input, .dark-mode textarea {
+  background: #333;
+  color: #eee;
+  border-color: #555;
+}
+
+textarea:hover, input:hover {
+  border-color: #007bff;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+}
+
+textarea:focus, input:focus {
+  outline: none;
+  border-color: #ff00ff;
+  box-shadow: 0 0 12px rgba(255, 0, 255, 0.5);
+}
+
+/* Password Container */
+.password-container {
+  margin: 20px 0;
+  text-align: left;
+}
+
+.password-container label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.password-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.password-input input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+.password-input button {
+  background: none;
+  border: none;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+/* Button Styling */
+button.primary {
+  background: #4f5bd5;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+button.primary:hover {
+  background: #3b47a1;
+}
+
+/* Hover effects for elements in dark mode */
+.dark-mode .container:hover {
+  border-color: #007bff;
+}
+
+.bold-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.bold-button:hover {
+  background-color: #0056b3;
+}
+
+</style>
+
+<script>
+  // Encrypt Message Function
+  async function encryptMessage() {
+    const imageInput = document.getElementById('fileInput');
+    const message = document.getElementById('message').value;
+    const securityKey = document.getElementById('securityKey').value;
+
+    if (!imageInput.files.length || !message) {
+      alert('Please select an image and enter a message.');
+      return;
+    }
+
+    const file = imageInput.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function () {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+
+      img.onload = function () {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+
+        let messageToEncode = securityKey ? `${securityKey}:${message}` : message;
+        messageToEncode += '\0'; // Null terminator to mark the end of the message
+
+        for (let i = 0; i < messageToEncode.length; i++) {
+          data[i * 4] = messageToEncode.charCodeAt(i); // Store message in red channel
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+        const stegoImage = canvas.toDataURL('image/png');
+
+        const link = document.createElement('a');
+        link.href = stegoImage;
+        link.download = 'stego-image.png';
+        link.click();
+      };
+
+      img.src = reader.result;
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  // Dark Mode Toggle
+  document.getElementById("darkModeToggle").addEventListener("click", function () {
+    document.body.classList.toggle("dark-mode");
+  });
+
+  // Hide/Show Button Logic
+  document.getElementById("hideButton").addEventListener("click", function () {
+    const action = document.getElementById("action");
+    action.textContent = action.textContent.toLowerCase() === "encrypt" ? "decrypt" : "encrypt";
+  });
+
+  // File Input Logic
+  // File Input Logic
+const fileInput = document.getElementById("fileInput");
+const fileNameDisplay = document.getElementById("fileName");
+const dragDropArea = document.getElementById("dragDropArea");
+
+// Handle the file input change
+fileInput.addEventListener("change", function () {
+  fileNameDisplay.textContent = fileInput.files[0]?.name || "No file selected";
+});
+
+// Handle drag and drop
+dragDropArea.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  dragDropArea.classList.add("drag-hover");
+});
+
+dragDropArea.addEventListener("dragleave", () => {
+  dragDropArea.classList.remove("drag-hover");
+});
+
+dragDropArea.addEventListener("drop", (e) => {
+  e.preventDefault();
+  dragDropArea.classList.remove("drag-hover");
+  fileInput.files = e.dataTransfer.files;
+  fileNameDisplay.textContent = fileInput.files[0]?.name || "No file selected";
+});
+
+  // Toggle Password Visibility
+  document.getElementById("togglePassword").addEventListener("click", function () {
+    const passwordField = document.getElementById("securityKey");
+    passwordField.type = passwordField.type === "password" ? "text" : "password";
+  });
+
+  // Drag-and-Drop Logic
+
+
+dragDropArea.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  dragDropArea.classList.add("drag-hover");
+});
+
+dragDropArea.addEventListener("dragleave", () => dragDropArea.classList.remove("drag-hover"));
+
+dragDropArea.addEventListener("drop", (e) => {
+  e.preventDefault();
+  dragDropArea.classList.remove("drag-hover");
+
+  // Handle the dropped file
+  const files = e.dataTransfer.files;
+  if (files.length > 0) {
+    fileInput.files = files; // Assign dropped files to file input
+    fileNameDisplay.textContent = files[0].name; // Display the file name
+  } else {
+    fileNameDisplay.textContent = "No file selected"; // Reset the file name display if no file is dropped
+  }
+});
+
+</script>

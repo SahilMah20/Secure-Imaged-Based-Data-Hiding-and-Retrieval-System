@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StegoSafe - Decrypt</title>
+  <style>
+    /* General Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(120deg, #00c1fc, #cc00ff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #222;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 700px;
+      background: rgba(250, 239, 239, 0.9);
+      border: 3px solid #444;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      text-align: center;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      height: 50px;
+    }
+
+    .top-buttons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .top-buttons button {
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .top-buttons button:hover {
+      background-color: #0056b3;
+    }
+
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 100%;
+    }
+
+    input[type="file"],
+    input[type="password"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-top: 10px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+
+    textarea {
+      height: 100px;
+      resize: none;
+    }
+
+    .password-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative; /* For better control over positioning */
+}
+
+.password-container input {
+  flex: 1; /* Ensures the input box takes all available space */
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.password-container button {
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  min-width: 40px; /* Keeps the button width consistent */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.decrypt-btn {
+  width: 100%;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.decrypt-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.02);
+}
+
+
+    /* Dark Mode Styles */
+    body.dark-mode {
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .container {
+      background: rgba(34, 34, 34, 0.9);
+      border-color: #555;
+    }
+
+    body.dark-mode h1 {
+      color: #ffffff;
+    }
+
+    body.dark-mode .top-buttons button {
+      background-color: #007bff;
+      color: #fff;
+    }
+
+    body.dark-mode .top-buttons button:hover {
+      background-color: #0056b3;
+    }
+
+    body.dark-mode input[type="file"],
+    body.dark-mode input[type="password"],
+    body.dark-mode textarea {
+      background-color: #333;
+      color: #fff;
+      border: 1px solid #555;
+    }
+
+    body.dark-mode .password-container button {
+      background-color: #007bff;
+      color: #fff;
+    }
+
+    body.dark-mode button.decrypt-btn {
+      background-color: #007bff;
+      color: #fff;
+    }
+
+    body.dark-mode button.decrypt-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="top-bar">
+      <img src="Photos/shield.png" alt="Logo" class="logo">
+      <div class="top-buttons">
+        <a href="Encrypt.html"><button>Hide</button></a>
+        <button id="darkModeToggle">Dark Mode</button>
+      </div>
+    </header>
+  </div>
+
+  <div class="container">
+    <h1>Securely Decrypt Your Message from an Image</h1>
+    <div class="input-container">
+      <div>
+        <label for="fileInput">Select an Image:</label>
+        <input type="file" id="fileInput" accept="image/*">
+      </div>
+
+      <div class="password-container">
+        <input id="securityKey" type="password" placeholder="Enter Security Key (if used)">
+        <button id="togglePassword">👁️</button>
+      </div>
+
+      <button class="decrypt-btn" onclick="decryptMessage()">Decrypt Message</button>
+    </div>
+    <br>
+    <div>
+      <label for="outputMessage">Decrypted Message:</label>
+      <textarea id="outputMessage" readonly></textarea>
+    </div>
+  </div>
+
+  <script>
+    // Toggle Dark Mode
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    darkModeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      if (document.body.classList.contains('dark-mode')) {
+        document.body.style.background = "#121212";
+        darkModeToggle.textContent = "Light Mode";
+      } else {
+        document.body.style.background = "linear-gradient(120deg, #00c1fc, #cc00ff)";
+        darkModeToggle.textContent = "Dark Mode";
+      }
+    });
+
+    // Show/Hide Password
+    const togglePassword = document.getElementById('togglePassword');
+    const securityKey = document.getElementById('securityKey');
+    togglePassword.addEventListener('click', () => {
+      const type = securityKey.type === 'password' ? 'text' : 'password';
+      securityKey.type = type;
+      togglePassword.textContent = type === 'password' ? '👁️' : '🔒';
+    });
+
+    // Decrypt Message (Placeholder function)
+    async function decryptMessage() {
+      const imageInput = document.getElementById("fileInput");
+      const securityKey = document.getElementById("securityKey").value;
+      const outputField = document.getElementById("outputMessage");
+
+      if (!imageInput.files.length) {
+        alert("Please select an image to decrypt.");
+        return;
+      }
+
+      const file = imageInput.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function () {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const img = new Image();
+
+        img.onload = function () {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const data = imageData.data;
+
+          let decodedMessage = "";
+          for (let i = 0; i < data.length; i += 4) {
+            const charCode = data[i];
+            if (charCode === 0) break; // Stop at null terminator
+            decodedMessage += String.fromCharCode(charCode);
+          }
+
+          // Verify Security Key (if provided)
+          if (securityKey) {
+            const [key, message] = decodedMessage.split(":");
+            if (key !== securityKey) {
+              alert("Invalid security key!");
+              return;
+            }
+            decodedMessage = message;
+          }
+
+          outputField.value = decodedMessage || "No message found.";
+        };
+
+        img.src = reader.result;
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    // Drag and Drop Logic
+const dropZone = document.getElementById("dragDropArea");
+const fileInput = document.getElementById("fileInput");
+const fileNameDisplay = document.getElementById("fileName");
+
+// Function to handle file drop
+function handleFileDrop(file) {
+  if (file && file.type.startsWith("image/")) {
+    fileInput.files = [file]; // Update file input
+    fileNameDisplay.textContent = file.name; // Update file name display
+  } else {
+    alert("Please drop a valid image file.");
+  }
+}
+
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
